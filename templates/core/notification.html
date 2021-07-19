@@ -1,0 +1,156 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/user/all_profiles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12 col-md-5 card offset-md-3">
+            {% if notifications %}    
+                {% for notification in notifications %}
+                    {% if notification.notification_type == 2 %}        
+                            <div class="row py-3 px-5 border-bottom">                                    
+                                    <figure class="media-left">
+                                        <p class="image is-64x64">
+                                            {% if notification.sender.picture %}
+                                                <img src="/media/{{ notification.sender.picture }}" class="rounded-circle z-depth-0 profile__pic">
+                                            {% else %}
+                                                <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+                                            {% endif %}
+                                        </p>
+                                    </figure>
+                                    
+                                    <div class="media-content">
+                                        <div class="content mx-2">
+                                            <a href="{% url 'profile_view' notification.sender.username %}">
+                                                <strong>{{ notification.sender.full_name }} </strong> <small>@{{ notification.sender.username }}</small> 
+                                            </a>
+                                            <p><span class="fas fa-comment-dots"></span> Commented on</p>
+                                            <p>{{ notification.text_preview }}</p>
+                                            <strong><small>{{ notification.date|naturaltime }}</small></strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="ml-auto">                            
+                                        <a href="{% url 'post_detail_view' notification.post %}">
+                                            {% if notification.sender.picture %}
+                                                <img src="{{ notification.post.image.url }}" height="80" width="80" >
+                                            {% else %}
+                                                <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+                                            {% endif %}                                            
+                                        </a>                                       
+                                    </div>
+                                    <a href="{% url 'delete_notification_view' notification.id %}" class="content mx-2"><i class="fas fa-times-circle" style="color: black;"></i></a>
+                            </div>
+                    {% endif %}
+                    {% if notification.notification_type == 3 %}
+                        <div class="row py-3 px-5 border-bottom">                                    
+                            <figure class="media-left">
+                                <p class="image is-64x64">
+                                    {% if notification.sender.picture %}
+                                        <img src="/media/{{ notification.sender.picture }}" class="rounded-circle z-depth-0 profile__pic">
+                                    {% else %}
+                                        <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+                                    {% endif %}
+                                </p>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content mx-2">
+                                    <a href="{% url 'profile_view' notification.sender.username %}">
+                                        <strong>{{ notification.sender.full_name }} </strong> <small>@{{ notification.sender.username }}</small> 
+                                    </a>
+                                    
+                                    <p><i class="fas fa-user"></i> Followed You</p>
+                                    <strong><small>{{ notification.date|naturaltime }}</small></strong>
+                                </div>
+                            </div>
+                            <div class="ml-auto">                                                                                                                
+                                <a href="{% url 'delete_notification_view' notification.id %}" class="content mx-2"><i class="fas fa-times-circle" style="color: black;"></i></a>
+                                
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if notification.notification_type == 4 %}
+                        <div class="row py-3 px-5 border-bottom">                                    
+                            <figure class="media-left">
+                                <p class="image is-64x64">
+                                    {% if notification.sender.picture %}
+                                        <img src="/media/{{ notification.sender.picture }}" class="rounded-circle z-depth-0 profile__pic">
+                                    {% else %}
+                                        <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+                                    {% endif %}
+                                </p>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content mx-2">
+                                    <a href="{% url 'profile_view' notification.sender.username %}">
+                                        <strong>{{ notification.sender.full_name }} </strong> <small>@{{ notification.sender.username }}</small> 
+                                    </a>
+                                    <p><i class="fas fa-user"></i> Requested to follow you</p>
+                                    <strong><small>{{ notification.date|naturaltime }}</small></strong>
+                                </div>
+                            </div>
+                            <div class="ml-auto">                                                                                                                            
+                                <a href="{% url 'delete_notification_view' notification.id %}" class="content mx-2"><i class="fas fa-times-circle" style="color: black;"></i></a>                                                    
+                            </div>
+                            <div class="form-inline">
+                                <form method="POST" action="{% url 'follow_accepted_view' %}">
+                                    {% csrf_token %}
+                                    <input type="number" name="accepted_user_id" hidden value="{{ notification.sender.pk }}">
+                                    <button class="px-2 btn btn-sm btn-primary mx-2" type="submit">Accept Follow Request</button>
+                                </form>
+                                <form method="POST" action="{% url 'unfollow_request_view' %}">
+                                    {% csrf_token %}
+                                    <input type="number" name="unrequest_user_id" hidden value="{{ notification.sender.pk }}">
+                                    <button class="px-2 btn btn-sm btn-success mx-2" type="submit">Cancel Follow Request</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if notification.notification_type == 1 %}        
+                            <div class="row py-3 px-5 border-bottom">                                    
+                                    <figure class="media-left">                                    
+                                        <p class="image is-64x64">
+                                            {% if notification.sender.picture %}
+                                                <img src="/media/{{ notification.sender.picture }}" class="rounded-circle z-depth-0 profile__pic">
+                                            {% else %}
+                                                <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+                                            {% endif %}
+                                        </p>
+                                    </figure>
+                                    
+                                    <div class="media-content">
+                                        <div class="content mx-2">
+                                            <a href="{% url 'profile_view' notification.sender.username %}">
+                                                <strong>{{ notification.sender.full_name }} </strong> <small>@{{ notification.sender.username }}</small> 
+                                            </a>
+                                            <p><i class="fas fa-thumbs-up"></i> Liked your post</p>
+                                            <p>{{ notification.text_preview }}</p>
+                                            <strong><small>{{ notification.date|naturaltime }}</small></strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="ml-auto"> 
+                                        <a href="{% url 'post_detail_view' notification.post %}">
+                                            {% if notification.sender.picture %}
+                                                <img src="{{ notification.post.image.url }}" height="80" width="80" >
+                                            {% else %}
+                                                <img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+                                            {% endif %}                                            
+                                        </a>
+                                    </div>
+                                    <a href="{% url 'delete_notification_view' notification.id %}" class="content mx-2"><i class="fas fa-times-circle" style="color: black;"></i></a>
+                            </div>
+                    {% endif %}
+                {% endfor %}                 
+            {% else %}
+                <p class="justify-content-center text-center mx-auto my-5">No Notifications to display</p>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

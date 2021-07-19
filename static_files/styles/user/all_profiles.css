@@ -1,0 +1,10 @@
+.profile__pic{
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.counter.counter-lg {
+    top: -24px !important;
+}

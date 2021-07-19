@@ -1,0 +1,497 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/core/post_card.css' %}">
+<script src="https://cdn.tiny.cloud/1/9p117lktpcqi40ynvqmggnqoi8mj4glno653bigcf5k4rvcc/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+	tinymce.init({
+	  selector: "#mytextarea",
+	  plugins: "emoticons",
+	  toolbar: "emoticons",
+	  toolbar_location: "top-left",
+	  menubar: false,
+	  forced_root_block : false,
+	  width: "600",
+	  height: "110"
+	});
+  </script>
+
+{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+	<div class="content container-fluid bootstrap snippets bootdey">
+		  <div class="row row-broken">
+			<div class="col-sm-3 col-xs-12">
+			  <div class="col-inside-lg decor-default chat" style="overflow-y: scroll; height: 400px" tabindex="1000">
+				<div class="chat-users">
+					<h6>Messages</h6>
+				  	{% for message in messages %}
+						<a href="{% url 'directs_view' message.user.username %}" class="{% if active_direct == message.user.username %}is-active{% endif %}">
+							<div class="user">
+								<div class="avatar">
+									{% if message.user.picture.url %}
+										<img src="{{ message.user.picture.url }}" class="profile__pic rounded-circle z-depth-0">
+									{% else %}
+										<img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+									{% endif %}																		
+								</div>
+								<div class="name" style="color: black;">{{ message.user.full_name }}</div>
+								<div class="form-inline">
+									<div class="mood" style="color: black;">@{{ message.user.username }}					
+										{% if message.unread %}
+										<span class="badge badge-dark">{{ message.unread }}</span>
+										{% endif %}
+									</div>
+								</div>
+								
+							</div>
+						</a>
+					{% endfor %}
+				</div>
+			  </div>
+			</div>
+				<div class="col-sm-9 col-xs-12 chat" style="overflow-y: scroll; height: 400px" id="messagebody" tabindex="5001">
+					<div class="col-inside-lg decor-default">
+						<div class="chat-body">
+							{% if profileuser.username %}
+							<h6>
+								<a href="{% url 'profile_view' profileuser.username %}" class="text-decoration-none">
+									
+									<!-- Profile picture -->
+								<div class="form-inline">
+									{% if profileuser.picture.url %}
+										<img src="{{ profileuser.picture.url }}" class="rounded-circle z-depth-0 profile__pic">
+									{% else %}
+										<img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+									{% endif %}
+									<!-- Profile picture end -->
+		
+									<div class="d-flex mx-4">
+										<!-- User's full name -->
+										<p class="m-auto">{{ profileuser.full_name }}</p>											
+									</div>
+								</div>
+									
+							</a>
+							</h6>
+							{% for direct in directs %}
+								{% if direct.sender == direct.recipient %}
+									<div class="answer left">
+									{% if direct.body %}
+										<div class="avatar">
+											{% if profileuser.picture.url %}
+												<img src="{{ profileuser.picture.url }}" alt="User name">
+											{% else %}
+												<img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+											{% endif %}
+										</div>
+										<div class="name">{{ profileuser.full_name }}</div>			
+													{% if "http://127.0.0.1:8000" in direct.body %}
+
+													{% with value=direct.body|replace_and_digit %}
+														{% with post=value|get_post_obj %}		
+														{% if post %}												
+															<div class='card' style="width: 14rem;">
+																<a href="{% url 'post_detail_view' post.pk %}" class="text-decoration-none text-reset">
+											
+																	<!-- Post Image -->
+																	{% if post.image.url %}
+																		<img src="{{ post.image.url }}" class="w-100 img-fluid" style="height: 230px;object-fit: cover;">
+																	{% else %}
+																		<img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+																	{% endif %}
+																	<div class='posts__likes__comment mx-auto py-3 text-center text-mute row justify-content-center' style="font-size: 14px;">
+																		<span class="mx-2">
+																			<span class="far fa-heart"></span>
+											
+																			<!-- Total likes -->
+																			{{ post.likes_count }}
+																			
+																		</span> 
+																		<span class="mx-2">
+																			<span class="far fa-comment"></span>
+											
+																			<!-- Total comments -->
+																			{{ post.comments_count }}
+											
+																		</span>
+																	</div>
+																</a>
+															</div>
+														{% else %}
+															<div class="text">
+																<strong>Post Unavailable</strong>
+																<br>
+																<small>This post is Unavailable because it was deleted</small>
+															</div>
+														{% endif %}
+														{% endwith %}
+													{% endwith %}
+
+											{% else %}
+												<div class="text">
+													{{ direct.body }} 
+												</div>
+											{% endif %}
+										<div class="time">{{ direct.date|date:'N d G:i'}}</div>
+									{% endif %}
+									</div>
+								{% else %}
+									<div class="answer right">
+									{% if direct.body %}
+										<div class="avatar">
+											{% if direct.user.picture.url %}
+												<img src="{{ direct.user.picture.url }}" alt="User name">
+											{% else %}
+												<img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+											{% endif %}
+										</div>
+										<div class="name">{{ direct.user.full_name }}</div>
+										{% if "http://127.0.0.1:8000" in direct.body %}
+
+												{% with value=direct.body|replace_and_digit %}
+													{% with post=value|get_post_obj %}		
+													{% if post %}												
+													<div class='card' style="width: 14rem;">
+														<a href="{% url 'post_detail_view' post.pk %}" class="text-decoration-none text-reset">
+									
+															<!-- Post Image -->
+															{% if post.image.url %}
+																<img src="{{ post.image.url }}" class="w-100 img-fluid" style="height: 230px;object-fit: cover;">
+															{% else %}
+																<img src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"  class="profile__pic rounded-circle z-depth-0">
+															{% endif %}
+															<div class='posts__likes__comment mx-auto py-3 text-center text-mute row justify-content-center' style="font-size: 14px;">
+																<span class="mx-2">
+																	<span class="far fa-heart"></span>
+									
+																	<!-- Total likes -->
+																	{{ post.likes_count }}
+									
+																</span> 
+																<span class="mx-2">
+																	<span class="far fa-comment"></span>
+									
+																	<!-- Total comments -->
+																	{{ post.comments_count }}
+									
+																</span>
+															</div>
+														</a>
+													</div>
+													{% else %}
+													<div class="text">
+														<strong>Post Unavailable</strong>
+														<br>
+														<small>This post is Unavailable because it was deleted</small>
+													</div>
+													{% endif %}
+													{% endwith %}
+												{% endwith %}
+
+										{% else %}
+											<div class="text">
+												{{ direct.body }} 
+											</div>
+										{% endif %}
+										<div class="time">{{ direct.date|date:'N d G:i'}}</div>
+									{% endif %}
+									</div>
+								{% endif %}
+							{% endfor %}							
+							<form role="form" method="POST" action="{% url 'send_direct_view' %}">
+								{% csrf_token %}		
+								<div class="chat-box bg-white">
+									<div class="input-group">
+										<input type="hidden" name="to_user" value="{{ active_direct }}">
+										<input id="mytextarea" class="form-control border no-shadow no-rounded" placeholder="Type your message here" name="body">
+										<span class="input-group-btn">
+											<button class="btn btn-success no-rounded" type="submit" name="action">Send</button>
+										</span>	
+									</div>
+								</div>  
+							</form>				
+							{% else %}
+								<img src="{% static 'img/instamessage.jpg' %}" width="650" height="400">
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		var objDiv = document.getElementById("messagebody");
+
+		objDiv.scrollTop = objDiv.scrollHeight;
+	</script>
+	
+	<style type="text/css">
+	body{
+		margin-top:20px;
+		background:#eee;
+	}
+	.row.row-broken {
+		padding-bottom: 0;
+	}
+	.col-inside-lg {
+		padding: 20px;
+	}
+	.chat {
+		height: calc(100vh - 180px);
+	}
+	.decor-default {
+		background-color: #ffffff;
+	}
+	.chat-users h6 {
+		font-size: 20px;
+		margin: 0 0 20px;
+	}
+	.chat-users .user {
+		position: relative;
+		padding: 0 0 0 50px;
+		display: block;
+		cursor: pointer;
+		margin: 0 0 20px;
+	}
+	.chat-users .user .avatar {
+		top: 0;
+		left: 0;
+	}
+	.chat .avatar {
+		width: 40px;
+		height: 40px;
+		position: absolute;
+	}
+	.chat .avatar img {
+		height: 40px;
+  		width: 40px;
+  		object-fit: cover;
+  		overflow: hidden;
+	}
+	.chat .avatar .status.off {
+		border: 1px solid #5a5a5a;
+		background: #ffffff;
+	}
+	.chat .avatar .status.online {
+		background: #4caf50;
+	}
+	.chat .avatar .status.busy {
+		background: #ffc107;
+	}
+	.chat .avatar .status.offline {
+		background: #ed4e6e;
+	}
+	.chat-users .user .status {
+		bottom: 0;
+		left: 28px;
+	}
+	.chat .avatar .status {
+		width: 10px;
+		height: 10px;
+		border-radius: 5px;
+		position: absolute;
+	}
+	.chat-users .user .name {
+		font-size: 14px;
+		font-weight: bold;
+		line-height: 20px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.chat-users .user .mood {
+		font: 200 14px/20px "Raleway", sans-serif;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	
+	/*****************CHAT BODY *******************/
+	.chat-body h6 {
+		font-size: 20px;
+		margin: 0 0 20px;
+	}
+	.chat-body .answer.left {
+		padding: 0 0 0 58px;
+		text-align: left;
+		float: left;
+	}
+	.chat-body .answer {
+		position: relative;
+		max-width: 600px;
+		overflow: hidden;
+		clear: both;
+	}
+	.chat-body .answer.left .avatar {
+		left: 0;
+	}
+	.chat-body .answer .avatar {
+		bottom: 36px;
+	}
+	.chat .avatar {
+		width: 40px;
+		height: 40px;
+		position: absolute;
+	}
+	.chat .avatar img {
+		display: block;
+		border-radius: 20px;
+		height: 100%;
+	}
+	.chat-body .answer .name {
+		font-size: 14px;
+		line-height: 36px;
+	}
+	.chat-body .answer.left .avatar .status {
+		right: 4px;
+	}
+	.chat-body .answer .avatar .status {
+		bottom: 0;
+	}
+	.chat-body .answer.left .text {
+		background: #ebebeb;
+		color: #333333;
+		border-radius: 8px 8px 8px 0;
+	}
+	.chat-body .answer .text {
+		padding: 12px;
+		font-size: 16px;
+		line-height: 26px;
+		position: relative;
+	}
+	.chat-body .answer.left .text:before {
+		left: -30px;
+		border-right-color: #ebebeb;
+		border-right-width: 12px;
+	}
+	.chat-body .answer .text:before {
+		content: '';
+		display: block;
+		position: absolute;
+		bottom: 0;
+		border: 18px solid transparent;
+		border-bottom-width: 0;
+	}
+	.chat-body .answer.left .time {
+		padding-left: 12px;
+		color: #333333;
+	}
+	.chat-body .answer .time {
+		font-size: 16px;
+		line-height: 36px;
+		position: relative;
+		padding-bottom: 1px;
+	}
+	/*RIGHT*/
+	.chat-body .answer.right {
+		padding: 0 58px 0 0;
+		text-align: right;
+		float: right;
+	}
+	
+	.chat-body .answer.right .avatar {
+		right: 0;
+	}
+	.chat-body .answer.right .avatar .status {
+		left: 4px;
+	}
+	.chat-body .answer.right .text {
+		background: #7266ba;
+		color: #ffffff;
+		border-radius: 8px 8px 0 8px;
+	}
+	.chat-body .answer.right .text:before {
+		right: -30px;
+		border-left-color: #7266ba;
+		border-left-width: 12px;
+	}
+	.chat-body .answer.right .time {
+		padding-right: 12px;
+		color: #333333;
+	}
+	
+	/**************ADD FORM ***************/
+	.chat-box {
+		/*
+		  position: fixed;
+		  bottom: 0;
+		  left: 444px;
+		  right: 0;
+		*/
+		  padding: 15px;
+		  border-top: 1px solid #eee;
+		  transition: all .5s ease;
+		  -webkit-transition: all .5s ease;
+		  -moz-transition: all .5s ease;
+		  -ms-transition: all .5s ease;
+		  -o-transition: all .5s ease;
+		}
+	.chat-body .answer-add {
+		clear: both;
+		position: relative;
+		margin: 20px -20px -20px;
+		padding: 0px;
+		background: rgb(211, 211, 226);
+	}
+	.chat-body .answer-add input {
+		border: none;
+		background: none;
+		display: block;
+		width: 70%;
+		font-size: 16px;
+		line-height: 20px;
+		padding: 0;
+		color: black;
+	}
+	.chat input {
+		-webkit-appearance: none;
+		border-radius: 0;
+	}
+	.chat-body .answer-add .answer-btn-1 {
+		background: url("http://91.234.35.26/iwiki-admin/v1.0.0/admin/img/icon-40.png") 50% 50% no-repeat;
+		right: 56px;
+	}
+	.chat-body .answer-add .answer-btn {
+		display: block;
+		cursor: pointer;
+		width: 36px;
+		height: 36px;
+		position: absolute;
+		top: 50%;
+		margin-top: -18px;
+	}
+	.chat-body .answer-add .answer-btn-2 {
+		background: url("http://91.234.35.26/iwiki-admin/v1.0.0/admin/img/icon-41.png") 50% 50% no-repeat;
+		right: 20px;
+	}
+	.chat input::-webkit-input-placeholder {
+	   color: #fff;
+	}
+	
+	.chat input:-moz-placeholder { /* Firefox 18- */
+	   color: #fff;  
+	}
+	
+	.chat input::-moz-placeholder {  /* Firefox 19+ */
+	   color: #fff;  
+	}
+	
+	.chat input:-ms-input-placeholder {  
+	   color: #fff;  
+	}
+	.chat input {
+		-webkit-appearance: none;
+		border-radius: 0;
+	}
+	</style>
+	
+	<script type="text/javascript">
+	$(function(){
+		$(".chat").niceScroll();
+	})
+	</script>
+{% endblock %}
