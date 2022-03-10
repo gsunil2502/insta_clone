@@ -1,4 +1,4 @@
-# Instagram Clone
+## InstaClone [![GitHub stars](https://img.shields.io/github/stars/gsunil2502/insta_clone?style=social)](https://github.com/login?return_to=%2Fgsunil2502%insta_clone) ![GitHub forks](https://img.shields.io/github/forks/gsunil2502/insta_clone?style=social) ![GitHub last commit](https://img.shields.io/github/last-commit/gsunil2502/insta_clone) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/gsunil2502/insta_clone)
 
 Project is live at [**InstaClone**](https://sunilinstagram.pythonanywhere.com/)
 > Backend:- Django.
