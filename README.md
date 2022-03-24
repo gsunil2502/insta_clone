@@ -1,4 +1,4 @@
-## InstaClone [![GitHub stars](https://img.shields.io/github/stars/gsunil2502/insta_clone?style=social)](https://github.com/login?return_to=%2Fgsunil2502%insta_clone) ![GitHub forks](https://img.shields.io/github/forks/gsunil2502/insta_clone?style=social) ![GitHub last commit](https://img.shields.io/github/last-commit/gsunil2502/insta_clone) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/gsunil2502/insta_clone)
+## InstaClone [![GitHub stars](https://img.shields.io/github/stars/gsunil99/insta_clone?style=social)](https://github.com/login?return_to=%2Fgsunil99%insta_clone) ![GitHub forks](https://img.shields.io/github/forks/gsunil99/insta_clone?style=social) ![GitHub last commit](https://img.shields.io/github/last-commit/gsunil99/insta_clone) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/gsunil99/insta_clone)
 
 Project is live at [**InstaClone**](https://sunilinstagram.pythonanywhere.com/)
 > Backend:- Django.
@@ -10,7 +10,7 @@ Project is live at [**InstaClone**](https://sunilinstagram.pythonanywhere.com/)
 
 ## How to run the project!
 ### - Clone the project
-> ``` git clone  "https://github.com/gsunil2502/insta_clone.git" ```
+> ``` git clone  "https://github.com/gsunil99/insta_clone.git" ```
 ### - Create a new virtual environment and activate
 > For Windows - (Python must be installed, ofcourse!)
 
@@ -33,7 +33,7 @@ Follow these steps:
 - Fork the project.
 - Clone the repository to your local environment.
 
-    ```$ git clone  "https://github.com/gsunil2502/insta_clone.git" ```
+    ```$ git clone  "https://github.com/gsunil99/insta_clone.git" ```
     
 - Make new changes, commit the changes and upload that to your GitHub.
 
