@@ -1,6 +1,10 @@
 ## InstaClone [![GitHub stars](https://img.shields.io/github/stars/gsunil99/insta_clone?style=social)](https://github.com/login?return_to=%2Fgsunil99%insta_clone) ![GitHub forks](https://img.shields.io/github/forks/gsunil99/insta_clone?style=social) ![GitHub last commit](https://img.shields.io/github/last-commit/gsunil99/insta_clone) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/gsunil99/insta_clone)
 
+
 Project is live at [**InstaClone**](https://sunilinstagram.pythonanywhere.com/)
+
+https://user-images.githubusercontent.com/56781242/229135711-acb54bcf-4a13-40a9-8138-19c0101747c4.mp4
+
 > Backend:- Django.
 
 > Frontend:- HTML, CSS, Bootstrap.
