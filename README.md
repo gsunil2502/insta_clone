@@ -3,7 +3,10 @@
 
 Project is live at [**InstaClone**](https://sunilinstagram.pythonanywhere.com/)
 
-https://user-images.githubusercontent.com/56781242/229135711-acb54bcf-4a13-40a9-8138-19c0101747c4.mp4
+
+<video
+src="https://user-images.githubusercontent.com/56781242/229135711-acb54bcf-4a13-40a9-8138-19c0101747c4.mp4">
+</video>
 
 > Backend:- Django.
 
